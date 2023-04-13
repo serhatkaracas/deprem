@@ -1,0 +1,197 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Apr 11 12:47:40 2023
+
+@author: Serhat
+"""
+
+kullanicilar = []
+
+cadir = 0
+cadir_eklenen = 0
+cadir_giden = 0
+cadir_istenen = 0 
+cadir_ihtiyac = 0
+
+gida = 0
+gida_eklenen = 0
+gida_giden = 0
+gida_istenen = 0
+gida_ihtiyac = 0
+
+kullanicilar = []
+secim = 0
+mevcut_kullanici = ""
+calis = 1
+giris = 1
+durum = ""
+
+# Menüyü tanımla
+menu = """
+1. Sisteme üye ol
+2. Sisteme giriş yap
+3. Şifremi unuttum
+4. Programı kapat
+"""
+
+# Sonsuz döngü
+while calis == 1:
+    while giris == 1:
+        print(menu)
+        
+        # Kullanıcının seçimini al
+        secim = input("Seçiminiz (1-6):\n ")
+        
+        # Sisteme üye ol
+        if secim == "1":
+            kullanici_adi = input("Kullanıcı adı: ")
+            for kullanici in kullanicilar:
+                if kullanici[0] == kullanici_adi:
+                    print("Bu kullanıcı adı zaten alınmış.\n")
+                    break
+            else:
+                sifre = input("Şifre: ")
+                kullanicilar.append([kullanici_adi, sifre])
+                print("Üyelik başarıyla oluşturuldu.\n")
+        
+        # Sisteme giriş yap
+        elif secim == "2":
+            kullanici_adi = input("Kullanıcı adı: ")
+            sifre = input("Şifre: ")
+            for kullanici in kullanicilar:
+                if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                    if not kullanici_adi == "admin":
+                        print("Hoş geldin {}\n".format(kullanici[0]))
+                        mevcut_kullanici = kullanici[0]
+                        giris = 0
+                        break
+
+                    if kullanici_adi == "admin":
+                        print("Hoş geldin admin!\n")
+                        mevcut_kullanici = "admin"
+                        
+                        #admin yetkileri
+                        while True:
+                            yetki = input("Kayıtlı  kullanıcılarını ve şifrelerini görüntülemek için 1 'e\n\
+Kullanıcı hesaplarını silmek için 2'ye\nHesaptan çıkış yapmak için 3'e basınız\n")
+
+                            if yetki == "1": 
+                                print(kullanicilar)
+                            elif yetki == "2": 
+                                kullanici_adi = input("Kullanıcı adı: ")
+                                sifre = input("Şifre: ")
+                                for kullanici in kullanicilar:
+                                    if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                                        kullanicilar.remove(kullanici)
+                                        print("Kullanıcı hesabı başarıyla silindi.\n")
+                                        break
+                                if not kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                                    print("kullanıcı adı veya şifre hatalı.\n")
+                            elif yetki == "3":
+                                mevcut_kullanici = ""
+                                break
+            for kullanici in kullanicilar:
+                if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                    print("Kullanıcı adı veya şifre hatalı.\n")
+        
+        # Şifremi unuttum
+        elif secim == "3":
+            kullanici_adi = input("Kullanıcı adı: ")
+            for kullanici in kullanicilar:
+                if kullanici[0] == kullanici_adi:
+                    yeni_sifre = input("Yeni şifre: ")
+                    kullanici[1] = yeni_sifre
+                    print("Şifreniz başarıyla güncellendi.\n")
+                    break
+            else:
+                print("Bu kullanıcı adı sistemde kayıtlı değil.\n")
+    
+                
+        elif secim == "4":
+            print("program kapatılıyor.\n")
+            calis = 0
+            giris = 0
+            
+        
+        elif mevcut_kullanici =="admin":
+            print("Kullanıcı hesaplarını silmek için 0'a basınız")
+            if secim == "0": 
+                kullanici_adi = input("Kullanıcı adı: ")
+                sifre = input("Şifre: ")
+                for kullanici in kullanicilar:
+                    if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                        kullanicilar.remove(kullanici)
+                        print("Kullanıcı hesabı başarıyla silindi.\n")
+                        break
+                if not kullanici in kullanicilar:
+                    print("Bu kullanıcı adı sistemde kayıtlı değil.\n")
+        else:
+            print("Hatalı seçim.\n")
+            
+         # veri girişi dögüsü
+    while mevcut_kullanici != "":
+        
+        print("Sayın",mevcut_kullanici)
+        durum = input("İhtiyaç belirtmek için 1'e,\nTedarik bilgisi için 2'ye,\n\
+Yapılan yardım dağıtımı için 3'e,\nÇıkış için 4'e basınız\n")
+
+        if durum == "1":
+            ihtiyac = input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n")
+
+            
+            if ihtiyac == "1":
+                cadir_istenen = int(input("İstenen çadır sayısını yazınız\n"))
+                cadir_ihtiyac += cadir_istenen
+                print("Toplam {} çadır var".format(cadir))
+                if cadir_ihtiyac > 0:
+                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
+                if cadir_ihtiyac - cadir > 0:  
+                    print("{} tane daha çadırın temin edilmesi gerekiyor\n".format(cadir_istenen - cadir))
+            elif ihtiyac == "2":
+                gida_istenen = int(input("İstenen gıda paketi sayısını yazınız\n"))
+                gida_ihtiyac += gida_istenen
+                print("{} gıda paketine ihtiyaç var".format(gida))
+                if gida_ihtiyac > 0:
+                    print("{} adet gıda paketinin dağıtılması gerekiyor\n".format(gida_istenen))
+                if gida_ihtiyac - gida > 0:  
+                    print("{} tane daha gıda paketinin temin edilmesi gerekiyor\n".format(gida_istenen - gida))
+        elif durum == "2":
+            ihtiyac = int(input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n"))
+            if ihtiyac == 1:
+                cadir_eklenen = int(input("Eklenecek çadır sayısını yazınız\n"))
+                cadir += cadir_eklenen
+                print("Toplam {} çadır var".format(cadir))
+                if cadir_ihtiyac > 0:
+                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
+                if cadir_ihtiyac - cadir > 0:  
+                    print("{} tane daha çadırın temin edilmesi gerekiyor\n".format(cadir_istenen - cadir))
+            elif ihtiyac == "2":
+                gida_eklenen = int(input("Eklenecek gıda paketi sayısını yazınız\n"))
+                gida += gida_eklenen 
+                print("{} gıda paketi var".format(gida))
+                if gida_istenen > 0:
+                    print("{} adet gıda paketinin dağıtılması gerekiyor\n".format(gida_istenen))
+                if gida_ihtiyac - gida > 0:  
+                    print("{} tane daha gıda paketinin temin edilmesi gerekiyor\n".format(gida_istenen - gida))
+        elif durum == "3":
+            ihtiyac = int(input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n"))
+            if ihtiyac == 1:
+                cadir_giden = int(input("Dağıtılan çadır sayısını yazınız\n"))
+                cadir -= cadir_giden
+                cadir_ihtiyac -= cadir_giden
+                print("Toplam {} çadır var".format(cadir))
+                if cadir_ihtiyac > 0:
+                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
+            elif ihtiyac == "2":       
+                gida_giden = int(input("Dağıtılan gıda paketi sayısını yazınız\n"))
+                gida -= gida_giden 
+                gida_ihtiyac -= gida_giden
+                print("Toplam {} gıda paketi  var".format(gida))
+                if gida_ihtiyac > 0:
+                    print("{} adet gida paketinin dağıtılması gerekiyor\n".format(gida_istenen))
+        elif durum == "4":
+            print("Çıkış yapılıyor")
+            mevcut_kullanici = ""
+            giris = 1
+            
+
