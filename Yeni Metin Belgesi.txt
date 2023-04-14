@@ -5,8 +5,6 @@ Created on Tue Apr 11 12:47:40 2023
 @author: Serhat
 """
 
-kullanicilar = []
-
 cadir = 0
 cadir_eklenen = 0
 cadir_giden = 0
@@ -60,13 +58,20 @@ while calis == 1:
             sifre = input("Şifre: ")
             for kullanici in kullanicilar:
                 if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
+                    continue
+                else:
+                    print("Kullanıcı adı veya şifre hatalı.\n")
+                    break
+    
+            for kullanici in kullanicilar:
+                if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
                     if not kullanici_adi == "admin":
                         print("Hoş geldin {}\n".format(kullanici[0]))
                         mevcut_kullanici = kullanici[0]
                         giris = 0
                         break
 
-                    if kullanici_adi == "admin":
+                    elif kullanici_adi == "admin":
                         print("Hoş geldin admin!\n")
                         mevcut_kullanici = "admin"
                         
@@ -90,10 +95,7 @@ Kullanıcı hesaplarını silmek için 2'ye\nHesaptan çıkış yapmak için 3'e
                             elif yetki == "3":
                                 mevcut_kullanici = ""
                                 break
-            for kullanici in kullanicilar:
-                if kullanici[0] == kullanici_adi and kullanici[1] == sifre:
-                    print("Kullanıcı adı veya şifre hatalı.\n")
-        
+                            
         # Şifremi unuttum
         elif secim == "3":
             kullanici_adi = input("Kullanıcı adı: ")
