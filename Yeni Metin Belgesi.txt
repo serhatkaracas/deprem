@@ -5,17 +5,12 @@ Created on Tue Apr 11 12:47:40 2023
 @author: Serhat
 """
 
-cadir = 0
-cadir_eklenen = 0
-cadir_giden = 0
-cadir_istenen = 0 
-cadir_ihtiyac = 0
-
-gida = 0
-gida_eklenen = 0
-gida_giden = 0
-gida_istenen = 0
-gida_ihtiyac = 0
+liste = ""
+ihtiyaclar = {}
+ihtiyac_eklenen = []
+ihtiyac_giden = []
+ihtiyac_istenen = []
+ihtiyac_mevcut = []
 
 kullanicilar = []
 secim = 0
@@ -133,67 +128,48 @@ Kullanıcı hesaplarını silmek için 2'ye\nHesaptan çıkış yapmak için 3'e
          # veri girişi dögüsü
     while mevcut_kullanici != "":
         
-        print("Sayın",mevcut_kullanici)
-        durum = input("İhtiyaç belirtmek için 1'e,\nTedarik bilgisi için 2'ye,\n\
-Yapılan yardım dağıtımı için 3'e,\nÇıkış için 4'e basınız\n")
-
-        if durum == "1":
-            ihtiyac = input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n")
-
+        print("1. İhtiyaç malzemesi ekle")
+        print("2. İhtiyaç belirt")
+        print("3. Tedarik bilgisi gir")
+        print("4. Bilgileri görüntüle")
+        print("5. Çıkış")
+        secim = input("\nSeçiminizi yapın (1-6): ")
+    
             
-            if ihtiyac == "1":
-                cadir_istenen = int(input("İstenen çadır sayısını yazınız\n"))
-                cadir_ihtiyac += cadir_istenen
-                print("Toplam {} çadır var".format(cadir))
-                if cadir_ihtiyac > 0:
-                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
-                if cadir_ihtiyac - cadir > 0:  
-                    print("{} tane daha çadırın temin edilmesi gerekiyor\n".format(cadir_istenen - cadir))
-            elif ihtiyac == "2":
-                gida_istenen = int(input("İstenen gıda paketi sayısını yazınız\n"))
-                gida_ihtiyac += gida_istenen
-                print("{} gıda paketine ihtiyaç var".format(gida))
-                if gida_ihtiyac > 0:
-                    print("{} adet gıda paketinin dağıtılması gerekiyor\n".format(gida_istenen))
-                if gida_ihtiyac - gida > 0:  
-                    print("{} tane daha gıda paketinin temin edilmesi gerekiyor\n".format(gida_istenen - gida))
-        elif durum == "2":
-            ihtiyac = int(input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n"))
-            if ihtiyac == 1:
-                cadir_eklenen = int(input("Eklenecek çadır sayısını yazınız\n"))
-                cadir += cadir_eklenen
-                print("Toplam {} çadır var".format(cadir))
-                if cadir_ihtiyac > 0:
-                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
-                if cadir_ihtiyac - cadir > 0:  
-                    print("{} tane daha çadırın temin edilmesi gerekiyor\n".format(cadir_istenen - cadir))
-            elif ihtiyac == "2":
-                gida_eklenen = int(input("Eklenecek gıda paketi sayısını yazınız\n"))
-                gida += gida_eklenen 
-                print("{} gıda paketi var".format(gida))
-                if gida_istenen > 0:
-                    print("{} adet gıda paketinin dağıtılması gerekiyor\n".format(gida_istenen))
-                if gida_ihtiyac - gida > 0:  
-                    print("{} tane daha gıda paketinin temin edilmesi gerekiyor\n".format(gida_istenen - gida))
-        elif durum == "3":
-            ihtiyac = int(input("Çadır için 1'i, gıda paketi için 2'yi tuşlayınız\n"))
-            if ihtiyac == 1:
-                cadir_giden = int(input("Dağıtılan çadır sayısını yazınız\n"))
-                cadir -= cadir_giden
-                cadir_ihtiyac -= cadir_giden
-                print("Toplam {} çadır var".format(cadir))
-                if cadir_ihtiyac > 0:
-                    print("{} adet çadırın dağıtılması gerekiyor\n".format(cadir_istenen))
-            elif ihtiyac == "2":       
-                gida_giden = int(input("Dağıtılan gıda paketi sayısını yazınız\n"))
-                gida -= gida_giden 
-                gida_ihtiyac -= gida_giden
-                print("Toplam {} gıda paketi  var".format(gida))
-                if gida_ihtiyac > 0:
-                    print("{} adet gida paketinin dağıtılması gerekiyor\n".format(gida_istenen))
-        elif durum == "4":
-            print("Çıkış yapılıyor")
+        if secim == "1":
+                ihtiyac = input("İhtiyaç malzemesi girin: ")
+                adet = int(input("Adet girin: "))
+                if ihtiyac not in ihtiyaclar:
+                    ihtiyaclar[ihtiyac] = {'istenen': 0, 'mevcut': 0}
+                ihtiyaclar[ihtiyac]['istenen'] += adet
+    
+        elif secim == "2":
+            ihtiyac = input("Tedarik edilen ihtiyaç malzemesi girin: ")
+            adet = int(input("Adet girin: "))
+            if ihtiyac not in ihtiyaclar:
+                ihtiyaclar[ihtiyac] = {'istenen': 0, 'mevcut': 0}
+            ihtiyaclar[ihtiyac]['mevcut'] += adet
+
+        elif secim == "3":
+            ihtiyac = input("Dağıtılan ihtiyaç malzemesi girin: ")
+            adet = int(input("Adet girin: "))
+            if ihtiyac not in ihtiyaclar:
+                print("Bu ihtiyaç sistemde kayıtlı değil.")
+            elif adet > ihtiyaclar[ihtiyac]['mevcut']:
+                print("Girilen adet mevcut adetten fazla.")
+            else:
+                ihtiyaclar[ihtiyac]['mevcut'] -= adet
+                print("Dağıtım başarıyla gerçekleştirildi.")
+
+        elif secim == "4":
+            for ihtiyac, deger in ihtiyaclar.items():
+                print(f"{ihtiyac}: İstenen: {deger['istenen']}, Mevcut: {deger['mevcut']}")
+
+           
+        elif secim == "5":
+            print("Çıkış yapılıyor.")
             mevcut_kullanici = ""
             giris = 1
-            
 
+        else:
+            print("Hatalı seçim. Lütfen tekrar deneyin.")         
